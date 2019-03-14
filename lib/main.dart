@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:socket_flutter_plugin/socket_flutter_plugin.dart';
-
+import  'package:flutter_socket_io/flutter_socket_io.dart';
+import 'package:socketio_flutter/socketIOManager/socket_io_manager.dart';
 void main() => runApp(MaterialApp(
       home: MyApp(),
   )
@@ -18,17 +18,15 @@ class MyApp extends StatefulWidget{
 
 class MyAppState extends State<MyApp>{
   Future<void> initPlatformState() async {
-      SocketFlutterPlugin myIO = new SocketFlutterPlugin();
-      //myIO.socket("http://192.168.0.5/webchat_server_node_socket");
-      myIO.socket("http://192.168.0.5:8889");
-      //myIO.socket("http://192.168.0.5/webchat_server_node_app");
-      myIO.connect();
-      myIO.emit("connect", {});
+    SocketIO socketIO;
+    socketIO = SocketIOManager().createSocketIO("http://192.168.0.5:8889", "/");
+    socketIO.init();
+    socketIO.connect();
+    socketIO.sendMessage("connect", {});
   }
   @override
   void initState() {
     super.initState();
-    print('hago esto');
     initPlatformState();
   }
 
